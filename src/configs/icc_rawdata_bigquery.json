@@ -1,0 +1,6 @@
+{
+    "p_file_path": "../data/raw/icc.xlsx",
+    "p_sheet_name": "SÉRIE",
+    "p_header": 1,
+    "p_tabela_id": "icc_raw_dados_do_icc"
+}

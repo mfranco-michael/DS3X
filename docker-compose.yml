@@ -1,11 +1,63 @@
 version: '3.8'
 
 services:
-  python-app:
+  icf:
     build: .
-    container_name: python-app
+    container_name: icf
+    command: python src/ingestion.py src/configs/icf.json
     volumes:
       - .:/app
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/app/SA-michael.json
-    command: python src/main.py
+
+  icc:
+    build: .
+    container_name: icc
+    command: python src/ingestion.py src/configs/icc.json
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/SA-michael.json
+    volumes:
+      - .:/app
+
+  rawdata_bigquery_icf:
+    build: .
+    container_name: rawdata_bigquery_icf
+    command: python src/rawdata_bigquery.py src/configs/icf_rawdata_bigquery.json
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/SA-michael.json
+    volumes:
+      - .:/app
+      - ./data:/app/data
+      - ./src:/app/src
+    depends_on:
+      - icf
+      - icc
+
+  rawdata_bigquery_icc:
+    build: .
+    container_name: rawdata_bigquery_icc
+    command: python src/rawdata_bigquery.py src/configs/icc_rawdata_bigquery.json
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/SA-michael.json
+    volumes:
+      - .:/app
+      - ./data:/app/data
+      - ./src:/app/src
+    depends_on:
+      - icf
+      - icc
+  
+  trusted:
+    build: .
+    container_name: trusted
+    command: python src/trusted.py
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/SA-michael.json
+    volumes:
+      - .:/app
+      - ./src:/app/src
+    depends_on:
+        - icf
+        - icc
+        - rawdata_bigquery_icf
+        - rawdata_bigquery_icc

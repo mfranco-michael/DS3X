@@ -1,2 +1,6 @@
 google-cloud-bigquery
 pandas
+beautifulsoup4
+pandas_gbq
+unidecode
+openpyxl

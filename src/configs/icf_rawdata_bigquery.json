@@ -1,0 +1,6 @@
+{
+    "p_file_path": "../data/raw/icf.xlsx",
+    "p_sheet_name": "Série Histórica",
+    "p_header": 0,
+    "p_tabela_id": "icf_raw_dados_do_icf"
+}
